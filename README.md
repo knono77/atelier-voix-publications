@@ -6,6 +6,7 @@ Ce dépôt contient les versions publiques d’Atelier voix pour Windows x64. Po
 
 | Version | Évolutions |
 |---|---|
+| [v0.1.4](https://github.com/knono77/atelier-voix-publications/releases/tag/v0.1.4) | Barre Écouter et Stop au-dessus de la piste Voix, synchronisée avec les commandes du haut. |
 | [v0.1.3](https://github.com/knono77/atelier-voix-publications/releases/tag/v0.1.3) | Recherche de bruits similaires sur une piste Voix, écoute et exclusion des occurrences, mise en silence en lot. Mesure du gain, de la crête, du RMS et de la hauteur estimée. |
 | [v0.1.2](https://github.com/knono77/atelier-voix-publications/releases/tag/v0.1.2) | Réenregistrement d’un passage de voix avec préécoute, comparaison de l’original et de la reprise, validation et annulation. |
 | [v0.1.1](https://github.com/knono77/atelier-voix-publications/releases/tag/v0.1.1) | Autoriser le micro et démarrer l’enregistrement sont deux actions distinctes. |
