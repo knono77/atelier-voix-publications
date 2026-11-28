@@ -6,6 +6,7 @@ Ce dépôt contient les versions publiques d’Atelier voix pour Windows x64. Po
 
 | Version | Évolutions |
 |---|---|
+| [v0.1.7](https://github.com/knono77/atelier-voix-publications/releases/tag/v0.1.7) | Journal de diagnostic local, téléchargeable depuis l’interface et récupérable après un blocage. |
 | [v0.1.6](https://github.com/knono77/atelier-voix-publications/releases/tag/v0.1.6) | Annulation des opérations en attente et retour au montage via la barre d’état ou Échap. |
 | [v0.1.5](https://github.com/knono77/atelier-voix-publications/releases/tag/v0.1.5) | État visible des opérations de fichiers, réouverture moins gourmande en mémoire et tracé audio optimisé. |
 | [v0.1.4](https://github.com/knono77/atelier-voix-publications/releases/tag/v0.1.4) | Barre Écouter et Stop au-dessus de la piste Voix, synchronisée avec les commandes du haut. |
