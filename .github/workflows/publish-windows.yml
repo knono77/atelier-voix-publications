@@ -1,0 +1,59 @@
+name: Publish Atelier voix for Windows
+
+on:
+  push:
+    branches:
+      - publication/v*
+
+permissions:
+  contents: write
+
+concurrency:
+  group: atelier-voix-publication
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Verify and publish the release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PUBLICATION_REF: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          tag=${PUBLICATION_REF#publication/}
+          [[ $tag =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          cd publication
+          sha256sum --strict --check AtelierVoix.exe.sha256
+          file AtelierVoix.exe | grep -Eq 'PE32\+.*x86-64'
+          if ! gh release view "$tag" --repo "$REPOSITORY" --json isDraft > /dev/null; then
+            gh release create "$tag" --repo "$REPOSITORY" --target main --draft \
+              --title "Atelier voix $tag — Windows x64" --notes-file release-notes.md
+          fi
+
+          draft=$(gh release view "$tag" --repo "$REPOSITORY" --json isDraft --jq .isDraft)
+          published_assets=$(gh release view "$tag" --repo "$REPOSITORY" --json assets --jq '.assets[].name')
+          verify_dir=$(mktemp -d)
+          for asset in AtelierVoix.exe AtelierVoix.exe.sha256; do
+            if grep -Fxq "$asset" <<< "$published_assets"; then
+              gh release download "$tag" --repo "$REPOSITORY" --pattern "$asset" --dir "$verify_dir"
+              cmp "$asset" "$verify_dir/$asset"
+            else
+              [[ $draft == true ]]
+              gh release upload "$tag" "$asset" --repo "$REPOSITORY"
+            fi
+          done
+          gh release download "$tag" --repo "$REPOSITORY" --pattern 'AtelierVoix.exe*' \
+            --dir "$verify_dir" --clobber
+          cmp AtelierVoix.exe "$verify_dir/AtelierVoix.exe"
+          cmp AtelierVoix.exe.sha256 "$verify_dir/AtelierVoix.exe.sha256"
+          if [[ $draft == true ]]; then
+            gh release edit "$tag" --repo "$REPOSITORY" --draft=false --latest
+          fi
